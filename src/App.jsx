@@ -1,5 +1,6 @@
-import NoteForm from "./components/NoteForm";
 import { useState } from "react";
+import NoteForm from "./components/NoteForm";
+import NoteList from "./components/NoteList";
 
 const App = () => {
 	const [notes, setNotes] = useState([]); // নোটস এর জন্য গ্লোবাল স্টেট (বাই ডিফল্ট ফাঁকা অ্যারে)
@@ -10,8 +11,11 @@ const App = () => {
 				📝 Notes App
 			</h2>
 
-			{/* প্রপস হিসেবে স্টেট এবং সেটার ফাংশন পাঠানো হচ্ছে */}
+			{/* ফর্ম কম্পোনেন্ট */}
 			<NoteForm notes={notes} setNotes={setNotes} />
+
+			{/* লিস্ট কম্পোনেন্ট - এখানে আমরা notes স্টেট পাস করছি */}
+			<NoteList notes={notes} />
 		</div>
 	);
 };
