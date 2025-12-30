@@ -1,4 +1,4 @@
-const NoteList = ({ notes }) => {
+const NoteList = ({ notes, deleteNote }) => {
 	return (
 		<div className="space-y-4">
 			{/* যদি কোনো নোট না থাকে তবে মেসেজ দেখাও */}
@@ -20,6 +20,14 @@ const NoteList = ({ notes }) => {
 						<strong>Priority:</strong> {note.priority}
 					</p>
 					<p className="mt-2 text-gray-800">{note.description}</p>
+
+					{/* Delete Button */}
+					<button
+						className="mt-3 text-red-500 hover:text-red-700 cursor-pointer transition font-semibold"
+						onClick={() => deleteNote(note.id)}
+					>
+						🗑 Delete
+					</button>
 				</div>
 			))}
 		</div>
