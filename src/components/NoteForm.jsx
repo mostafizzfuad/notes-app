@@ -1,6 +1,11 @@
 import { useState } from "react";
+import TextInput from "./inputs/TextInput";
+import SelectInput from "./inputs/SelectInput";
+import TextareaInput from "./inputs/TextAreaInput";
 
 const NoteForm = ({ notes, setNotes }) => {
+	const [isFormVisible, setIsFormVisible] = useState(false);
+
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
@@ -35,74 +40,79 @@ const NoteForm = ({ notes, setNotes }) => {
 			category: "Work",
 			priority: "Medium",
 		});
+
+		// সাবমিট করার পর ফর্ম লুকিয়ে ফেলা হচ্ছে
+		setIsFormVisible(false);
 	};
 
 	return (
-		<form className="mb-6">
-			<div className="mb-4">
-				<label className="block font-semibold">Title:</label>
-				<input
-					type="text"
-					name="title" // এই নাম অবশ্যই স্টেটের key-এর মতো হতে হবে
-					value={formData.title} // formData থেকে ভ্যালু নেওয়া হচ্ছে
-					onChange={handleChange} // আমাদের নতুন হ্যান্ডলার
-					className="w-full p-2 border rounded-lg"
-					required
-				/>
-			</div>
-
-			{/* Priority Dropdown */}
-			<div className="mb-4">
-				<label className="block font-semibold">Priority:</label>
-				<select
-					name="priority"
-					value={formData.priority}
-					onChange={handleChange}
-					className="w-full p-2 border rounded-lg"
-				>
-					<option value="High">🔴 High</option>
-					<option value="Medium">🟠 Medium</option>
-					<option value="Low">🟢 Low</option>
-				</select>
-			</div>
-
-			{/* Category Dropdown */}
-			<div className="mb-4">
-				<label className="block font-semibold">Category:</label>
-				<select
-					name="category"
-					value={formData.category}
-					onChange={handleChange}
-					className="w-full p-2 border rounded-lg"
-				>
-					<option value="Work">📂 Work</option>
-					<option value="Personal">🏠 Personal</option>
-					<option value="Ideas">💡 Ideas</option>
-				</select>
-			</div>
-
-			{/* Description Textarea */}
-			<div className="mb-4">
-				<label className="block font-semibold">Description:</label>
-				<textarea
-					name="description"
-					value={formData.description}
-					onChange={handleChange}
-					className="w-full p-2 border rounded-lg"
-					rows="3"
-					placeholder="Write your note details..."
-					required
-				></textarea>
-			</div>
-
+		<div className="bg-white p-4 rounded-lg shadow-md mb-6">
+			{/* Toggle Button */}
 			<button
-				type="submit"
-				onClick={handleSubmit}
-				className="w-full bg-purple-500 text-white cursor-pointer py-2 rounded-lg hover:bg-purple-600 transition"
+				onClick={() => setIsFormVisible(!isFormVisible)}
+				className="w-full bg-gray-100 border border-gray-300 text-purple-800 py-2 rounded-lg cursor-pointer hover:bg-purple-200 hover:border-purple-300 transition mb-4 font-semibold"
 			>
-				Add Note
+				{isFormVisible ? "Hide Form ✖️" : "Add New Note ➕"}
 			</button>
-		</form>
+
+			{/* Form - শুধুমাত্র isFormVisible সত্য হলেই দেখাবে */}
+			{isFormVisible && (
+				<form className="mb-6">
+					{/* Title Input */}
+					<TextInput
+						label="Title"
+						name="title"
+						value={formData.title}
+						onChange={handleChange}
+						required
+					/>
+
+					{/* Priority Select */}
+					<SelectInput
+						label="Priority"
+						name="priority"
+						value={formData.priority}
+						onChange={handleChange}
+						options={[
+							{ value: "High", label: "🔴 High" },
+							{ value: "Medium", label: "🟠 Medium" },
+							{ value: "Low", label: "🟢 Low" },
+						]}
+					/>
+
+					{/* Category Select */}
+					<SelectInput
+						label="Category"
+						name="category"
+						value={formData.category}
+						onChange={handleChange}
+						options={[
+							{ value: "Work", label: "📂 Work" },
+							{ value: "Personal", label: "🏠 Personal" },
+							{ value: "Ideas", label: "💡 Ideas" },
+						]}
+					/>
+
+					{/* Description Textarea */}
+					<TextareaInput
+						label="Description"
+						name="description"
+						value={formData.description}
+						onChange={handleChange}
+						required
+						placeholder="Write your note details..."
+					/>
+
+					<button
+						type="submit"
+						onClick={handleSubmit}
+						className="w-full bg-purple-500 text-white cursor-pointer py-2 rounded-lg hover:bg-purple-600 transition"
+					>
+						Add Note
+					</button>
+				</form>
+			)}
+		</div>
 	);
 };
 
