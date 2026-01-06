@@ -1,9 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NoteForm from "./components/NoteForm";
 import NoteList from "./components/NoteList";
 
 const App = () => {
-	const [notes, setNotes] = useState([]); // নোটস এর জন্য গ্লোবাল স্টেট (বাই ডিফল্ট ফাঁকা অ্যারে)
+	const [notes, setNotes] = useState(() => {
+		// ১. লোকাল স্টোরেজ থেকে ডেটা আনার চেষ্টা করা
+		const savedNotes = JSON.parse(localStorage.getItem("notes")); // JSON.parse করে স্ট্রিং থেকে অবজেক্টে রূপান্তর করা হচ্ছে
+		// ২. যদি ডেটা থাকে তবে সেটি রিটার্ন করা, না থাকলে ফাঁকা অ্যারে
+		return savedNotes || [];
+	});
+
+	// নোট পরিবর্তন হলে LocalStorage-এ সেভ করা হবে
+	useEffect(() => {
+		localStorage.setItem("notes", JSON.stringify(notes));
+	}, [notes]);
 
 	const deleteNote = (id) => {
 		setNotes(notes.filter((note) => note.id !== id));
